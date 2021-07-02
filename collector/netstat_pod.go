@@ -106,7 +106,7 @@ func getPodTask(wg *sync.WaitGroup,container types.Container,ch chan<- prometheu
 			namespaceName = js.Config.Labels["io.kubernetes.pod.namespace"]
 		}else {
 			podName = strings.ReplaceAll(js.Name, "/", "")
-			namespaceName = "docker"
+			namespaceName = ""
 		}
 		tcpresult, _ := getPodSocketStats(pidPath(js.State.Pid))
 		for k, v := range tcpresult {
