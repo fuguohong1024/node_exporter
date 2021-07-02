@@ -15,6 +15,7 @@ require (
 	github.com/mattn/go-xmlrpc v0.0.3
 	github.com/mdlayher/genetlink v1.0.0 // indirect
 	github.com/mdlayher/wifi v0.0.0-20200527114002-84f0b9457fdd
+	github.com/mindprince/gonvml v0.0.0-20190828220739-9ebdce4bb989
 	github.com/moby/term v0.0.0-20210610120745-9d4ed1856297 // indirect
 	github.com/morikuni/aec v1.0.0 // indirect
 	github.com/panjf2000/ants v1.3.0

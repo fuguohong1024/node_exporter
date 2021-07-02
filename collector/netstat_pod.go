@@ -99,13 +99,22 @@ func getPodTask(wg *sync.WaitGroup,container types.Container,ch chan<- prometheu
 	return func() {
 		defer wg.Done()
 		js, _ := dockerClient.ContainerInspect(context.Background(), container.ID[:10])
+		var podName string
+		var namespaceName string
+		if strings.Contains(js.Name,"k8s") && js.Config.Labels["io.kubernetes.pod.name"] != "" && namespaceName != js.Config.Labels["io.kubernetes.pod.namespace"]{
+			podName = js.Config.Labels["io.kubernetes.pod.name"]
+			namespaceName = js.Config.Labels["io.kubernetes.pod.namespace"]
+		}else {
+			podName = strings.ReplaceAll(js.Name, "/", "")
+			namespaceName = "docker"
+		}
 		tcpresult, _ := getPodSocketStats(pidPath(js.State.Pid))
 		for k, v := range tcpresult {
 			ch <- prometheus.MustNewConstMetric(
 				prometheus.NewDesc(
 					prometheus.BuildFQName(namespace, netStatsPodSubsystem, k),
 					fmt.Sprintf("pods netstats: number of %s.", k),
-					nil, prometheus.Labels{"pod_name": strings.ReplaceAll(js.Name, "/", "")},
+					nil, prometheus.Labels{"namespace":namespaceName,"pod_name": podName},
 				),
 				prometheus.UntypedValue, float64(v),
 			)
