@@ -21,6 +21,7 @@ import (
 	"os"
 	"os/user"
 	"sort"
+	"time"
 
 	"github.com/prometheus/common/promlog"
 	"github.com/prometheus/common/promlog/flag"
@@ -169,6 +170,12 @@ func main() {
 
 	promlogConfig := &promlog.Config{}
 	flag.AddFlags(kingpin.CommandLine, promlogConfig)
+	// version 信息填充
+	version.Version = "v1.1"
+	version.BuildUser = "fugh"
+	version.BuildDate = time.Now().Format("2005-01-02 15:04:05")
+	version.Branch = "master"
+	version.Revision = "v1.0"
 	kingpin.Version(version.Print("node_exporter"))
 	kingpin.CommandLine.UsageWriter(os.Stdout)
 	kingpin.HelpFlag.Short('h')
